@@ -2,7 +2,38 @@
 # installs nginx and configure it to listen on port 80
 # print "Hello World"
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
-echo 'Hello World!' > /var/www/html/index.nginx-debian.html
-sudo service nginx start
+
+# Update package index
+apt-get update
+
+# Install Nginx
+apt-get install -y nginx
+
+# Configure Nginx to listen on port 80
+cat > /etc/nginx/sites-available/default <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location = / {
+        echo "HTTP/1.1 200 OK";
+        echo "Content-Type: text/html";
+        echo "";
+        echo "Hello World!";
+    }
+}
+EOF
+
+# Restart Nginx without using systemctl
+kill -s HUP $(pgrep nginx)
+
+
