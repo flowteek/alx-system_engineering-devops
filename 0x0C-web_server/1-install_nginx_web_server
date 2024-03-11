@@ -9,8 +9,18 @@ sudo apt-get -y update
 sudo apt-get -y install nginx
 
 # Print "Hello World!" to the default Nginx index file
-echo 'Hello World!' | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
-
+cat <<EOF > /var/www/html/index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hello World!</title>
+</head>
+<body>
+<h1>Hello World!</h1>
+<p>This is a test page served by Nginx.</p>
+</body>
+</html>
+EOF
 # Start Nginx service
 sudo service nginx start
 
